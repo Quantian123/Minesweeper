@@ -9,6 +9,8 @@ public class GameFrame extends JFrame implements ActionListener {
     JButton resetButton = new JButton("Reset");
     JPanel display =new JPanel();
     GamePanel gamePanel;
+
+    Timer timer=new Timer();
     public static void main(String[] args) {
         new GameFrame();
     }

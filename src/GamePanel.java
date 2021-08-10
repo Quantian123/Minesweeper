@@ -17,11 +17,10 @@ public class GamePanel extends JPanel {
     GamePanel() {
         setPreferredSize(new Dimension(BOARD_SIZE, BOARD_SIZE));
         setLayout(new GridLayout(GAME_SIZE, GAME_SIZE, 2, 2));
-        setBackground(Color.lightGray);
         makeBoard();
         setBombs();
         countBombsAround();
-       cellCleaner.start();
+        cellCleaner.start();
     }
     void makeBoard(){
         for (int i = 0; i < GAME_SIZE + 2; i++) {            //frame+board
@@ -123,6 +122,9 @@ public class GamePanel extends JPanel {
                     }
                 }
             }
+        }
+        void countFlaggedTiles(){
+
         }
         ImageIcon chosedIcon(Tile tile){
             ImageIcon tileIcon = new ImageIcon();
