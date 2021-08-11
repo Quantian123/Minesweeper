@@ -8,10 +8,10 @@ public class GamePanel extends JPanel {
     final static int BOARD_SIZE = 400;
     final static int GAME_SIZE = 10;
     final int BOMB_NUMBER = 10;
-    boolean gameRunning=false;
 
     int gameTime=0;
     Timer gameTimer=new Timer(1000,e -> gameTime++);
+    MyMouseAdapter myMouseAdapter=new MyMouseAdapter();
 
     Random randomGenerator = new Random();
     CellCleaner cellCleaner= new CellCleaner();
@@ -23,6 +23,7 @@ public class GamePanel extends JPanel {
         setLayout(new GridLayout(GAME_SIZE, GAME_SIZE, 2, 2));
         makeBoard();
         setBombs();
+        GameFrame.resetButton.setIcon(new ImageIcon("GameDef.png"));
         countBombsAround();
         cellCleaner.start();
     }
@@ -35,7 +36,7 @@ public class GamePanel extends JPanel {
         for (int i = 1; i < GAME_SIZE + 1; i++) {           //board
             for (int j = 1; j < GAME_SIZE + 1; j++) {
                 add(tiles[i][j]);
-                tiles[i][j].addMouseListener(new MyMouseAdapter());
+                tiles[i][j].addMouseListener(myMouseAdapter);
             }
         }
     }
@@ -68,6 +69,25 @@ public class GamePanel extends JPanel {
             }
         }
     }
+    void gameLost(){
+        gameTimer.stop();
+        for (int i = 1; i < GAME_SIZE + 1; i++) {
+            for (int j = 1; j < GAME_SIZE + 1; j++) {
+                tiles[i][j].removeMouseListener(myMouseAdapter);
+            }
+        }
+        GameFrame.resetButton.setIcon(new ImageIcon("GameLost.png"));
+    }
+    void gameWon(){
+        gameTimer.stop();
+        for (int i = 1; i < GAME_SIZE + 1; i++) {
+            for (int j = 1; j < GAME_SIZE + 1; j++) {
+                tiles[i][j].removeMouseListener(myMouseAdapter);
+                if (tiles[i][j].isAbomb)tiles[i][j].setIcon(TileIcons.BOMB);
+            }
+        }
+        GameFrame.resetButton.setIcon(new ImageIcon("GameWon.png"));
+    }
 
     class MyMouseAdapter extends MouseAdapter {
         Tile tile;
@@ -84,6 +104,7 @@ public class GamePanel extends JPanel {
                 if (tile.isAbomb) {
                     tile.setBackground(Color.red);
                     tile.setIcon(TileIcons.BOMB);
+                    gameLost();
                 }
                 else if (tile.bombsAround==0)tile.setIcon(TileIcons.ICON_0);
                 else if (tile.bombsAround==1)tile.setIcon(TileIcons.ICON_1);
@@ -114,6 +135,7 @@ public class GamePanel extends JPanel {
             while (true) {
                 showCellsAround();
                 countFlaggedTiles();
+                countTilesLeft();
                 GameFrame.timerDisplay.setText(String.valueOf(gameTime));
             }
         }
@@ -157,6 +179,17 @@ public class GamePanel extends JPanel {
             if (tile.bombsAround==8)tileIcon= TileIcons.ICON_8;
 
             return tileIcon;
+        }
+        void countTilesLeft(){
+            int defaultTiles=0;
+            for (int i = 1; i < GAME_SIZE + 1; i++) {
+                for (int j = 1; j < GAME_SIZE + 1; j++) {
+                    if(tiles[i][j].getIcon().equals(TileIcons.DEFAULT_TILE)){
+                        defaultTiles++;
+                    }
+                }
+            }
+            if (defaultTiles==BOMB_NUMBER) gameWon();
         }
     }
 }

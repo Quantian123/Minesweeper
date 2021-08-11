@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 public class GameFrame extends JFrame implements ActionListener {
     static JLabel unflaggedBombs = new JLabel();
     static JLabel timerDisplay =new JLabel();
-    JButton resetButton = new JButton("Reset");
+    static JButton resetButton = new JButton();
     JPanel display =new JPanel();
     GamePanel gamePanel;
 
@@ -47,7 +47,8 @@ public class GameFrame extends JFrame implements ActionListener {
         display.add(unflaggedBombs);
         add(display,BorderLayout.NORTH);
 
-        add(gamePanel=new GamePanel(), BorderLayout.CENTER);
+        add(gamePanel=new GamePanel(), BorderLayout.SOUTH);
+        add(new InfoPanel(),BorderLayout.CENTER);
 
         setVisible(true);
         pack();
@@ -59,7 +60,7 @@ public class GameFrame extends JFrame implements ActionListener {
             gamePanel.cellCleaner.stop();
             remove(gamePanel);
             gamePanel = new GamePanel();
-            add(gamePanel,BorderLayout.CENTER);
+            add(gamePanel,BorderLayout.SOUTH);
             SwingUtilities.updateComponentTreeUI(this);
         }
     }

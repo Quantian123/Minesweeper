@@ -28,5 +28,4 @@ public class TileIcons {
             .getImage().getScaledInstance(ICON_SIZE, ICON_SIZE, Image.SCALE_SMOOTH));
     public static final ImageIcon BOMB = new ImageIcon(new ImageIcon("bomb.png")
             .getImage().getScaledInstance(ICON_SIZE, ICON_SIZE, Image.SCALE_SMOOTH));
-
 }
