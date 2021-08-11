@@ -6,6 +6,6 @@ public class Tile extends JLabel {
 
     Tile(){
         setOpaque(true);
-        setIcon(TileIcon.DEFAULT_TILE);
+        setIcon(TileIcons.DEFAULT_TILE);
     }
 }

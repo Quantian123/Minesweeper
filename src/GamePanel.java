@@ -8,6 +8,10 @@ public class GamePanel extends JPanel {
     final static int BOARD_SIZE = 400;
     final static int GAME_SIZE = 10;
     final int BOMB_NUMBER = 10;
+    boolean gameRunning=false;
+
+    int gameTime=0;
+    Timer gameTimer=new Timer(1000,e -> gameTime++);
 
     Random randomGenerator = new Random();
     CellCleaner cellCleaner= new CellCleaner();
@@ -74,26 +78,29 @@ public class GamePanel extends JPanel {
             o = e.getSource();
             tile = (Tile) o;
 
-            if ((e.getButton() == MouseEvent.BUTTON1) && (!tile.getIcon().equals(TileIcon.FLAGGED_TILE))) {
+            gameTimer.start();
+
+            if ((e.getButton() == MouseEvent.BUTTON1) && (!tile.getIcon().equals(TileIcons.FLAGGED_TILE))) {
                 if (tile.isAbomb) {
                     tile.setBackground(Color.red);
-                    tile.setIcon(TileIcon.BOMB);
+                    tile.setIcon(TileIcons.BOMB);
                 }
-                else if (tile.bombsAround==0)tile.setIcon(TileIcon.ICON_0);
-                else if (tile.bombsAround==1)tile.setIcon(TileIcon.ICON_1);
-                else if (tile.bombsAround==2)tile.setIcon(TileIcon.ICON_2);
-                else if (tile.bombsAround==3)tile.setIcon(TileIcon.ICON_3);
-                else if (tile.bombsAround==4)tile.setIcon(TileIcon.ICON_4);
-                else if (tile.bombsAround==5)tile.setIcon(TileIcon.ICON_5);
-                else if (tile.bombsAround==6)tile.setIcon(TileIcon.ICON_6);
-                else if (tile.bombsAround==7)tile.setIcon(TileIcon.ICON_7);
-                else if (tile.bombsAround==8)tile.setIcon(TileIcon.ICON_8);
+                else if (tile.bombsAround==0)tile.setIcon(TileIcons.ICON_0);
+                else if (tile.bombsAround==1)tile.setIcon(TileIcons.ICON_1);
+                else if (tile.bombsAround==2)tile.setIcon(TileIcons.ICON_2);
+                else if (tile.bombsAround==3)tile.setIcon(TileIcons.ICON_3);
+                else if (tile.bombsAround==4)tile.setIcon(TileIcons.ICON_4);
+                else if (tile.bombsAround==5)tile.setIcon(TileIcons.ICON_5);
+                else if (tile.bombsAround==6)tile.setIcon(TileIcons.ICON_6);
+                else if (tile.bombsAround==7)tile.setIcon(TileIcons.ICON_7);
+                else if (tile.bombsAround==8)tile.setIcon(TileIcons.ICON_8);
 
             }
-            if (e.getButton() == MouseEvent.BUTTON3) {
-                if(tile.getIcon().equals(TileIcon.DEFAULT_TILE)){
-                    tile.setIcon(TileIcon.FLAGGED_TILE);
-                }else tile.setIcon(TileIcon.DEFAULT_TILE);
+            if (e.getButton() == MouseEvent.BUTTON3){
+                if(((tile.getIcon().equals(TileIcons.DEFAULT_TILE)))
+                        &&(!GameFrame.unflaggedBombs.getText().equals("0"))){
+                    tile.setIcon(TileIcons.FLAGGED_TILE);
+                }else tile.setIcon(TileIcons.DEFAULT_TILE);
             }
         }
     }
@@ -106,12 +113,14 @@ public class GamePanel extends JPanel {
         public void run() {
             while (true) {
                 showCellsAround();
+                countFlaggedTiles();
+                GameFrame.timerDisplay.setText(String.valueOf(gameTime));
             }
         }
         void showCellsAround() {
             for (int i = 1; i < GAME_SIZE + 1; i++) {
                 for (int j = 1; j < GAME_SIZE + 1; j++) {
-                    if (tiles[i][j].getIcon().equals(TileIcon.ICON_0)) {
+                    if (tiles[i][j].getIcon().equals(TileIcons.ICON_0)) {
                         tiles[i - 1][j].setIcon(chosedIcon(tiles[i - 1][j]));
                         tiles[i + 1][j].setIcon(chosedIcon(tiles[i + 1][j]));
                         tiles[i][j - 1].setIcon(chosedIcon(tiles[i][j - 1]));
@@ -124,24 +133,31 @@ public class GamePanel extends JPanel {
             }
         }
         void countFlaggedTiles(){
-
+            int flaggedTiles=0;
+            for (int i = 1; i < GAME_SIZE + 1; i++) {
+                for (int j = 1; j < GAME_SIZE + 1; j++) {
+                    if ((tiles[i][j].getIcon().equals(TileIcons.FLAGGED_TILE))
+                        && (flaggedTiles<BOMB_NUMBER)){
+                        flaggedTiles++;
+                    }
+                }
+            }
+            GameFrame.unflaggedBombs.setText(Integer.toString(BOMB_NUMBER-flaggedTiles));
         }
         ImageIcon chosedIcon(Tile tile){
             ImageIcon tileIcon = new ImageIcon();
-            if (tile.bombsAround==0)tileIcon=TileIcon.ICON_0;
-            if (tile.bombsAround==1)tileIcon=TileIcon.ICON_1;
-            if (tile.bombsAround==2)tileIcon=TileIcon.ICON_2;
-            if (tile.bombsAround==3)tileIcon=TileIcon.ICON_3;
-            if (tile.bombsAround==4)tileIcon=TileIcon.ICON_4;
-            if (tile.bombsAround==5)tileIcon=TileIcon.ICON_5;
-            if (tile.bombsAround==6)tileIcon=TileIcon.ICON_6;
-            if (tile.bombsAround==7)tileIcon=TileIcon.ICON_7;
-            if (tile.bombsAround==8)tileIcon=TileIcon.ICON_8;
+            if (tile.bombsAround==0)tileIcon= TileIcons.ICON_0;
+            if (tile.bombsAround==1)tileIcon= TileIcons.ICON_1;
+            if (tile.bombsAround==2)tileIcon= TileIcons.ICON_2;
+            if (tile.bombsAround==3)tileIcon= TileIcons.ICON_3;
+            if (tile.bombsAround==4)tileIcon= TileIcons.ICON_4;
+            if (tile.bombsAround==5)tileIcon= TileIcons.ICON_5;
+            if (tile.bombsAround==6)tileIcon= TileIcons.ICON_6;
+            if (tile.bombsAround==7)tileIcon= TileIcons.ICON_7;
+            if (tile.bombsAround==8)tileIcon= TileIcons.ICON_8;
 
             return tileIcon;
         }
     }
-
-
 }
 

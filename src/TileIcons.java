@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class TileIcon {
+public class TileIcons {
     private static final int ICON_SIZE =GamePanel.BOARD_SIZE/GamePanel.GAME_SIZE;
 
     public static final ImageIcon DEFAULT_TILE = new ImageIcon(new ImageIcon("facingDown.png")

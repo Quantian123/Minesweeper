@@ -4,13 +4,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GameFrame extends JFrame implements ActionListener {
-    JLabel resultsDisplay = new JLabel();
-    JLabel timerDisplay =new JLabel();
+    static JLabel unflaggedBombs = new JLabel();
+    static JLabel timerDisplay =new JLabel();
     JButton resetButton = new JButton("Reset");
     JPanel display =new JPanel();
     GamePanel gamePanel;
 
-    Timer timer=new Timer();
     public static void main(String[] args) {
         new GameFrame();
     }
@@ -28,26 +27,24 @@ public class GameFrame extends JFrame implements ActionListener {
         timerDisplay.setFont(new Font("Digital-7" ,Font.ITALIC,120));
         timerDisplay.setHorizontalAlignment(SwingConstants.CENTER);
         timerDisplay.setVerticalAlignment(SwingConstants.TOP);
-        timerDisplay.setText("23");
 
         resetButton.setBounds(150,0,100,100);
         resetButton.setFocusable(false);
         resetButton.addActionListener(this);
 
-        resultsDisplay.setBounds(250,0,150,100);
-        resultsDisplay.setOpaque(true);
-        resultsDisplay.setBackground(Color.black);
-        resultsDisplay.setForeground(Color.red);
-        resultsDisplay.setFont(new Font("Digital-7" ,Font.ITALIC,120));
-        resultsDisplay.setHorizontalAlignment(SwingConstants.CENTER);
-        resultsDisplay.setVerticalAlignment(SwingConstants.TOP);
-        resultsDisplay.setText("0");
+        unflaggedBombs.setBounds(250,0,150,100);
+        unflaggedBombs.setOpaque(true);
+        unflaggedBombs.setBackground(Color.black);
+        unflaggedBombs.setForeground(Color.red);
+        unflaggedBombs.setFont(new Font("Digital-7" ,Font.ITALIC,120));
+        unflaggedBombs.setHorizontalAlignment(SwingConstants.CENTER);
+        unflaggedBombs.setVerticalAlignment(SwingConstants.TOP);
 
         display.setPreferredSize(new Dimension(400,100));
         display.setLayout(null);
         display.add(timerDisplay);
         display.add(resetButton);
-        display.add(resultsDisplay);
+        display.add(unflaggedBombs);
         add(display,BorderLayout.NORTH);
 
         add(gamePanel=new GamePanel(), BorderLayout.CENTER);
